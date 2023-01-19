@@ -1,0 +1,30 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+{% extends 'base_bk.html' %}
+{% block content %}
+<style>
+  .alert-center {
+    text-align: center;
+    vertical-align: middle;}
+  </style>
+
+<div class="container"> 
+  <table class='table'>
+
+    <th>Pergunta</th>
+    <th>Resposta</th>
+    {% for row in df %}
+    <tr>   
+        <td> 
+          <a >{{row[0]}} </a>
+        </td>
+        <td>
+            <a>{{row[1]}} </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

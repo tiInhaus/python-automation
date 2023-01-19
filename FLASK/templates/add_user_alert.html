@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .alert-center {
+    text-align: center;
+    vertical-align: middle;}
+  </style>
+
+<head>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Add alerta </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/add_shift">Adicionar novo turno</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </head>
+
+
+
+<div class="container"> 
+<form method="post" action="">
+    <table class="table">
+      <th style="width:10vw" class = "alert-center">NOME</th>
+      <th style="width:10vw" class = "alert-center">TELEGRAM ID</th>
+      <th style="width:15vw" class = "alert-center"> LISTA DE CRs</th>
+      <th style="width:5vw" class = "alert-center">FORA DO PRAZO </br><span style="font-size: 10px;">(A CADA 1H)</span></th>
+      <th style="width:5vw" class = "alert-center">EM ALERTA </br><span style="font-size: 10px;">(A CADA 1H)</span></th>
+      <th style="width:5vw" class = "alert-center">STATUS REPORT </br><span style="font-size: 10px;">(1x POR DIA)</span></th>
+      <th style="width:5vw" class = "alert-center">CHAMADOS PENDENTES</br><span style="font-size: 10px;">(A CADA 2H)</span></th>
+      <th style="width:7vw" class = "alert-center">TURNO</th>
+        <th style="width:10vw" ></th>
+    <tr>
+      <td><input type="text" size="15" name="name" class='form-control'></td>
+      <td><input type="text" size="10" name="telegram_id" class='form-control'></td>
+      <td><input type="text" size="30" name="cr_list" class='form-control'></td>
+      <td style="text-align: center; vertical-align: middle;"><input type="checkbox" class="form-check-input " name="alerta1" ></label> </td> 
+      <td style="text-align: center; vertical-align: middle;"><input type="checkbox" class="form-check-input " name="alerta2" ></label> </td> 
+      <td style="text-align: center; vertical-align: middle;"><input type="checkbox" class="form-check-input " name="alerta3" ></label> </td> 
+      <td style="text-align: center; vertical-align: middle;"><input type="checkbox" class="form-check-input " name="alerta4" ></label> </td> 
+      <td><select name="shift_id" id = "shifts" class="form-control">
+          <option ></option>
+          {% for rl in shifts_type %}
+          <option value="{{rl.id}}"> {{rl.name}}</option>
+          {% endfor %}
+      </select>
+      </td>
+        <td >   <span style="font-size:24px;">     <input type="submit" name="submit" value="  Inserir  " class="btn btn-outline-success btn-sm"> 
+             </span>     </td>
+    </tr>
+    <input type="hidden" name="alerta1" value=False>
+    <input type="hidden" name="alerta2" value=False>
+    <input type="hidden" name="alerta3" value=False>
+    <input type="hidden" name="alerta4" value=False>
+  
+</form>
+{% for row in results %}
+<tr>   
+    <form method="post" action="/add_user_alert/{{row[0].id}}">
+    <td >
+        <input size="15" type="text" id="name" name="name" value="{{row[0].name}}" class='form-control'>
+    </td>
+    <td>
+        <input type="text" size="10"  id="telegram_id" name="telegram_id" value="{{row[0].telegram_id}}" class='form-control'>
+    </td>
+    <td>
+      <input type="text" size="30"  id="cr_list" name="cr_list" value="{{row[0].cr_list}}" class='form-control'>
+  </td>
+  <td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="alerta1" {{'checked="checked"' if row[0].alerta1 else ""}}></label>  </td>
+  <td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="alerta2" {{'checked="checked"' if row[0].alerta2 else ""}}></label>  </td>
+  <td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="alerta3" {{'checked="checked"' if row[0].alerta3 else ""}}></label>  </td>
+  <td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="alerta4" {{'checked="checked"' if row[0].alerta4 else ""}}> </label></td>
+  <td>    <select name="shift_id" id = "shift_id" class="form-control">
+        <option value="{{row[0].rasp_id}}"> {{row[1].name}}</option>
+        {% for rl in shifts_type %}
+        <option value="{{rl.id}}"> {{rl.name}}</option>
+        {% endfor %}    </select>
+  </td>
+    <input type="hidden" id="id" name="id" value={{row[0].id}}>
+    </span> 
+    <td> <span style="font-size:24px;">
+        <input type="submit" name="submit" value="Atualizar" class="btn btn-outline-success btn-sm"> 
+
+        <a href="/add_user_alert/delete/{{row[0].id}}" method="POST" class="btn btn-outline-danger btn-sm">Deletar</a>
+    </span>   
+</td>
+</tr>
+<input type="hidden" name="alerta1" value=>
+<input type="hidden" name="alerta2" value=>
+<input type="hidden" name="alerta3" value=>
+<input type="hidden" name="alerta4" value=>
+</form>
+{% endfor %}
+</table>
+</div>
+
+{% endblock %}

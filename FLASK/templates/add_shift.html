@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/add_user_alert">Add alerta </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Adicionar novo turno</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </head>
+
+
+<div class="container"> 
+<form method="post" action="">
+    
+    <table class="table">
+      <th class ="alert-center">NOME</th>
+      <th class ="alert-center">DESCRIÇÃO</th>
+      <th class ="alert-center">INÍCIO</th>
+      <th class ="alert-center">FIM</th>
+      <th class = "alert-center">SÁB</br></th>
+    <th class ="alert-center">DOM</br></th>
+        <th></th>
+    <tr>
+        <td><input type="text" size="40" name="name" class='form-control'></td>
+        <td><input type="text" size="20" name="shift_description" class='form-control'></td>
+        <td><input type="time" size="10" name="init_date" class='form-control'value="00:00"></td>
+        <td><input type="time" size="10" name="end_date" class='form-control' value="00:00" required></td>
+        <td style="text-align: center; vertical-align: middle;"><input type="checkbox" class="form-check-input " name="sabado" ></label>
+        <td style="text-align: center; vertical-align: middle;"><input type="checkbox" class="form-check-input " name="domingo" ></label>
+        <td>   <span style="font-size:24px;">     <input type="submit" name="submit" value="  Inserir  " class="btn btn-outline-success btn-sm"> 
+             </span>     </td>
+    </tr>
+    <input type="hidden" name="sabado" value=False>
+    <input type="hidden" name="domingo" value=False>
+</form>
+{% for row in vista_shift %}
+<tr>   
+    <form method="post" action="/add_shift/{{row.id}}">
+    <td >
+        <input size="40" type="text" id="name" name="name" value="{{row.name}}" class='form-control'>
+    </td>
+    <td>
+        <input type="text" size="20"  id="shift_description" name="shift_description" value="{{row.shift_description}}" class='form-control'>
+    </td>
+    <td>
+      <input type="time" size="10"  id="init_date" name="init_date" value="{{row.init_date}}" class='form-control'>
+  </td>
+  <td>
+    <input type="time" size="10"  id="end_date" name="end_date" value="{{row.end_date}}" class='form-control'>
+</td>
+<td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="sabado" {{'checked="checked"' if row.sabado else ""}}></label>  </td>
+<td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="domingo" {{'checked="checked"' if row.domingo else ""}}></label>  </td>
+<input type="hidden" name="sabado" value=False>
+<input type="hidden" name="domingo" value=False>
+    <input type="hidden" id="id" name="id" value={{row.id}}>
+    </span> 
+    <td> <span style="font-size:24px;">
+        <input type="submit" name="submit" value="Atualizar" class="btn btn-outline-success btn-sm"> 
+
+        <a href="/add_shift/delete/{{row.id}}" method="POST" class="btn btn-outline-danger btn-sm">Deletar</a>
+    </span>   
+</td>
+</tr>
+</form>
+
+
+{% endfor %}
+</table>
+</div>
+
+{% endblock %}
