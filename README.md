@@ -1,11 +1,11 @@
-# Foobar
+# Instruções e procedimentos
 
 
 python-automation - Bots de conexão e disparo de mensagens automatizadas via telegram.
 
 ## Instalação
-  Python 3
-  VS Code
+  Python 3 <br />
+  VS Code <br />
   Plugin Python
 
 ```bash
@@ -31,15 +31,15 @@ frontend
 
 ## Commits e PRs
 
-Commit
+### Commit
   Para publição de atualizações, utilize "<Siglas do seu nome> - <Número da sua issue>".
   Exemplo: MV - 012
   
- Pull requests
+ ### Pull requests
   Para título do pull request, utilize "<Título da issue> - <Status do desenvolvimento>".
   Exemplo: Correção de bug nas querys - finalizado.
   
-  Status de desenvolvimento
+  ####Status de desenvolvimento
     Finalizado
     Em desenvolvimento
     
@@ -47,7 +47,5 @@ Commit
   Para cada atividade crie uma branch, utilize "<Título da issue> - <Número da issue>"
   Ao finalizar, ou se precisar subir ainda em desenvolvimento, sempre suba primeiramente na sua própria branch, depois de testado, faça um pull request para dev.
   A master só deverá possuir conteúdo que deve ir para produção.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+  
+  ---
