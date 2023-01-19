@@ -32,20 +32,20 @@ frontend
 ## Commits e PRs
 
 ### Commit
-  Para publição de atualizações, utilize "<Siglas do seu nome> - <Número da sua issue>".
+  Para publição de atualizações, utilize ```<Siglas do seu nome> - <Número da sua issue>``` <br />
   Exemplo: MV - 012
   
  ### Pull requests
-  Para título do pull request, utilize "<Título da issue> - <Status do desenvolvimento>".
+  Para título do pull request, utilize ```<Título da issue> - <Status do desenvolvimento>``` <br />
   Exemplo: Correção de bug nas querys - finalizado.
   
-  ####Status de desenvolvimento
+  #### Status de desenvolvimento
     Finalizado
     Em desenvolvimento
     
 ## Branches
-  Para cada atividade crie uma branch, utilize "<Título da issue> - <Número da issue>"
-  Ao finalizar, ou se precisar subir ainda em desenvolvimento, sempre suba primeiramente na sua própria branch, depois de testado, faça um pull request para dev.
-  A master só deverá possuir conteúdo que deve ir para produção.
+  Para cada atividade crie uma branch, utilize ```<Título da issue> - <Número da issue>``` <br /><br />
+  Ao finalizar, ou se precisar subir ainda em desenvolvimento, sempre suba primeiramente na sua própria branch, depois de testado, faça um pull request para dev. <br /><br />
+  ⚠️⚠️⚠️ A master só deverá possuir conteúdo que deve ir para produção
   
   ---
