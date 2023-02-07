@@ -255,8 +255,9 @@ def user_alert_add():
                 date_updated= None)
             db.session.add(vista_users)
             db.session.commit()
-        except:
-            print("ERRO NO INSERT")
+            return redirect("/add_user_alert")
+        except Exception as e:
+            print("ERRO NO INSERT -- " + e)
         finally:
             return redirect("/add_user_alert")
 
@@ -272,9 +273,10 @@ def user_alert_delete(id):
         return 'O DELETE FALHOU'
 
 #FUNÇÃO DE UPDATE ALERTA USUÁRIO
-@app.route('/add_user_alert/<int:id>', methods=['GET','POST'])
+@app.route('/add_user_alert/<int:id>', methods=['GET', 'POST'])
 def update_user_alert(id):
     vista_users = VISTA_USER_ALERTS.query.get_or_404(id)
+    print('============ ja definiu vusta users ============', vista_users.id)
     if request.method =='POST':
         vista_users.alerta1 = False
         vista_users.alerta2 = False
@@ -293,11 +295,15 @@ def update_user_alert(id):
         if request.form['alerta4'] == 'on':
             vista_users.alerta4 = True
     try:
+        print('======== dentro do try ========', vista_users.alerta1, vista_users.alerta2, vista_users.alerta3, vista_users.alerta4,vista_users.name, vista_users.shift_id,vista_users.telegram_id, vista_users.cr_list)
         db.session.commit()
+        print('======== session.commit feito ========')
+    except Exception as e:
+        return 'o update falhou ', e
+    finally:
         return redirect("/add_user_alert")
-    except:
-        return 'o update falhou'
 
+        
 #   PÁGINA DE CRIAÇÃO DE TURNOS
 @app.route('/add_shift', methods = ['GET','POST'])
 def add_shift():  
