@@ -32,8 +32,8 @@ frontend
 ## Commits e PRs
 
 ### Commit
-  Para publição de atualizações, utilize ```<Siglas do seu nome> - <Número da sua issue>``` <br />
-  Exemplo: MV - 012
+  Para publição de atualizações, utilize ```<Número do commit> - <Número do commit>``` <br />
+  Exemplo: 1 - Ajustes realizados
   
  ### Pull requests
   Para título do pull request, utilize ```<Título da issue> - <Status do desenvolvimento>``` <br />
