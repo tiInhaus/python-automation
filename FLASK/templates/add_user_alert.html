@@ -63,8 +63,8 @@
 </form>
 {% for row in results %}
 <tr>   
-    <form method="post" action="/add_user_alert/{{row[0].id}}">
-    <td >
+    <form method="POST" action="/add_user_alert/{{row[0].id}}">
+    <td>
         <input size="15" type="text" id="name" name="name" value="{{row[0].name}}" class='form-control'>
     </td>
     <td>
@@ -78,7 +78,7 @@
   <td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="alerta3" {{'checked="checked"' if row[0].alerta3 else ""}}></label>  </td>
   <td style="text-align: center; vertical-align: middle;">  <input type="checkbox" class="form-check-input " name="alerta4" {{'checked="checked"' if row[0].alerta4 else ""}}> </label></td>
   <td>    <select name="shift_id" id = "shift_id" class="form-control">
-    <option value="{{row[0].rasp_id}}" disabled selected> {{row[1].name}}</option>
+    <option value="{{row[0].shift_id}}" selected> {{row[1].name}}</option>
     {% for rl in shifts_type %}
         <option value="{{rl.id}}"> {{rl.name}}</option>
         {% endfor %}    </select>
