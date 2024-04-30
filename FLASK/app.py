@@ -21,7 +21,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mssql+pyodbc://gpsvista:%s@10.56.7.150:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "msuuuuuuuperkey141Kk42"
 db = SQLAlchemy(app)
-db.init_app(app)
+
+
 
 #### Criação das Classes/Tabelas banco
 class RASP_NAMES(db.Model):
@@ -408,16 +409,182 @@ def projeto_king_vista_find(id):
 def gpsvista_tarefas(data=None):
     if request.method =='GET':       
         query_user = ("""  select  count(1) Id  from Vista_Replication_PRD.dbo.Tarefa  
-        where status = 85 and TerminoReal >= datefromparts(year(DATEADD(HH, -3, GETDATE()) ), month(DATEADD(HH, -3, GETDATE()) ), 1)
-        and TerminoReal < dateadd(month, 1, datefromparts(year(DATEADD(HH, -3, GETDATE()) ), month(DATEADD(HH, -3, GETDATE()) ), 1)) """)  
+        where status = 85 and expirada = 0 and TerminoReal >= datefromparts(year(DATEADD(HH, -3, GETDATE()) ), month(DATEADD(HH, -3, GETDATE()) ), 1)
+        and TerminoReal < dateadd(month, 1, datefromparts(year(DATEADD(HH, -3, GETDATE()) ), month(DATEADD(HH, -3, GETDATE()) ), 1)) """)
+        query_all_months = ("""
+        WITH Meses AS (
+        SELECT 1 AS Mes
+        UNION ALL
+        SELECT 2 AS Mes
+        UNION ALL
+        SELECT 3 AS Mes
+        UNION ALL
+        SELECT 4 AS Mes
+        UNION ALL
+        SELECT 5 AS Mes
+        UNION ALL
+        SELECT 6 AS Mes
+        UNION ALL
+        SELECT 7 AS Mes
+        UNION ALL
+        SELECT 8 AS Mes
+        UNION ALL
+        SELECT 9 AS Mes
+        UNION ALL
+        SELECT 10 AS Mes
+        UNION ALL
+        SELECT 11 AS Mes
+        UNION ALL
+        SELECT 12 AS Mes
+    ),
+    Tarefas AS (
+        SELECT 
+            MONTH(TerminoReal) AS Mes,
+            COUNT(1) AS TotalTarefas
+        FROM 
+            Tarefa  
+        WHERE 
+            status = 85 
+            AND expirada = 0
+            AND TerminoReal >= DATEFROMPARTS(YEAR(DATEADD(HH, -3, GETDATE())), 1, 1) -- Primeiro dia do ano atual
+            AND TerminoReal < DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(DATEADD(HH, -3, GETDATE())), 1, 1)) -- Primeiro dia do próximo ano
+        GROUP BY 
+            MONTH(TerminoReal)
+    )
+    SELECT 
+        m.Mes,
+        CASE WHEN m.Mes <= MONTH(GETDATE()) THEN COALESCE(t.TotalTarefas, 0) ELSE 0 END AS TotalTarefas
+    FROM 
+        Meses m
+    LEFT JOIN 
+        Tarefas t ON m.Mes = t.Mes
+    ORDER BY 
+        m.Mes;
+        """)  
 
         #PASSA PARAMETROS DE CONEXÃO
         conn = pyodbc.connect ('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        meses = []  
         df = pd.read_sql(query_user, conn)
-        property_count = df.head().values[0][0]
-        conn.close()       
-
-        return render_template('cont_tarefas.html', count=property_count)
+        df_meses = pd.read_sql(query_all_months, conn)
+        mes_atual = df.head().values[0][0]
+        acumulado = 0
+        try:
+                if df_meses.values[0][1] > 0:
+                    acumulado = df_meses.values[0][1]
+                    janeiro = '{:,.0f}'.format(acumulado).replace(',', '.')
+                str_1 = 'jan' 
+        except IndexError:
+            janeiro = 0
+            
+        try:
+                if df_meses.values[1][1] > 0:
+                    acumulado = acumulado + df_meses.values[1][1]
+                    fevereiro = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     fevereiro = 0
+                str_2 = 'fev'
+        except IndexError:
+            fevereiro = 0
+        try:
+                if df_meses.values[2][1] > 0:
+                    acumulado = acumulado + df_meses.values[2][1]
+                    marco = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     marco = 0                    
+                str_3 = 'mar' 
+        except IndexError:
+            marco = 0
+        try:
+                if df_meses.values[3][1] > 0:
+                    acumulado = acumulado + df_meses.values[3][1]
+                    abril = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     abril = 0                    
+                str_4 = 'abr' 
+        except IndexError:
+            abril = 0 
+        try:
+                if df_meses.values[4][1] > 0:
+                    acumulado = acumulado + df_meses.values[4][1]
+                    maio = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     maio = 0  
+                str_5 = 'mai'
+        except IndexError:
+            maio = 0
+        try:
+                if df_meses.values[5][1] > 0:
+                    acumulado = acumulado + df_meses.values[5][1]
+                    junho = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     junho = 0  
+                str_6 = 'jun' 
+        except IndexError:
+            junho = 0 
+        try:
+                if df_meses.values[6][1] > 0:
+                    acumulado = acumulado + df_meses.values[6][1]
+                    julho = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     julho = 0  
+                str_7 = 'jul' 
+        except IndexError:
+            julho = 0
+        try:
+                if df_meses.values[7][1] > 0:
+                    acumulado = acumulado + df_meses.values[7][1]
+                    agosto = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     agosto = 0  
+                str_8 = 'ago' 
+        except IndexError:
+            agosto = 0
+        try:
+                if df_meses.values[8][1] > 0:
+                    acumulado = acumulado + df_meses.values[8][1]
+                    setembro = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     setembro = 0  
+                str_9 = 'set' 
+        except IndexError:
+            setembro = 0
+        try:
+                if df_meses.values[9][1] > 0:
+                    acumulado = acumulado + df_meses.values[9][1]
+                    outubro = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     outubro = 0  
+                str_10 = 'out' 
+        except IndexError:
+            outubro = 0
+        try:
+                if df_meses.values[10][1] > 0:
+                    acumulado = acumulado + df_meses.values[10][1]
+                    novembro = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     novembro = 0  
+                str_11 = 'nov' 
+        except IndexError:
+            novembro = 0 
+        try:
+                if df_meses.values[11][1] > 0:
+                    acumulado = acumulado + df_meses.values[11][1]
+                    dezembro = '{:,.0f}'.format(acumulado).replace(',', '.')
+                else:
+                     dezembro = 0 
+                str_12 = 'dez' 
+        except IndexError:
+            dezembro = 0 
+            str_12 = 'dez'
+        conn.close() 
+        return render_template('cont_tarefas.html', count=mes_atual,jan=janeiro,
+                               fev=fevereiro,mar=marco,abr=abril,mai=maio,
+                               jun=junho,jul=julho,ago=agosto,set=setembro,
+                               out=outubro,nov=novembro,dez=dezembro,
+                               mes_1=str_1,mes_2=str_2,mes_3=str_3,mes_4=str_4,
+                               mes_5=str_5,mes_6=str_6,mes_7=str_7,mes_8=str_8,
+                               mes_9=str_9,mes_10=str_10,mes_11=str_11,mes_12=str_12)
 
 
 #Página para carregar informações Smart_delta
