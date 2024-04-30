@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+      .alert-center {
+          text-align: center;
+          width: 100%
+      }
+
+      .content {
+          display: flex;
+          font-family: Arial, sans-serif;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 50vh; /* Define a altura da tela inteira para centralizar verticalmente */
+          color: white;
+          text-align: center;
+      }
+
+      .pairs {
+          display: flex;
+          flex-direction: row; /* Altera a direção do layout para linha */
+          align-items: center; /* Alinha os pares ao centro */
+          justify-content: center; /* Centraliza os pares na linha */
+          flex-wrap: wrap; /* Permite que os pares quebrem para a próxima linha se não houver espaço suficiente */
+      }
+
+      .pair {
+          margin: 20px; /* Adiciona um espaço entre os pares */
+          text-align: center; /* Alinha os elementos internos ao centro */
+      }
+
+      .count-large {
+          font-size: 25vw;
+          margin-bottom: 20px; /* Adiciona um espaçamento entre o número grande e os meses */
+      }
+
+      .count-small {
+          font-size: 22px;
+          margin: 5px 0; /* Adiciona um espaçamento entre os números */
+      }
+  </style>
+<script type="text/javascript">
+    setTimeout(function(){
+      location = ''
+    },60000)
+  </script>
+</head>
+<body style="background:black;">
+  <div class="content">
+      <p class="count-large">{{count}}</p>
+      <div class="pairs">
+          <div class="pair">
+              <p class="count-small">{{mes_1}}</p>
+              <p class="count-small">{{jan}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_2}}</p>
+              <p class="count-small">{{fev}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_3}}</p>
+              <p class="count-small">{{mar}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_4}}</p>
+              <p class="count-small">{{abr}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_5}}</p>
+              <p class="count-small">{{mai}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_6}}</p>
+              <p class="count-small">{{jun}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_7}}</p>
+              <p class="count-small">{{jul}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_8}}</p>
+              <p class="count-small">{{ago}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_9}}</p>
+              <p class="count-small">{{set}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_10}}</p>
+              <p class="count-small">{{out}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_11}}</p>
+              <p class="count-small">{{nov}}</p>
+          </div>
+          <div class="pair">
+              <p class="count-small">{{mes_12}}</p>
+              <p class="count-small">{{dez}}</p>
+          </div>
+      </div>
+  </div>
+</body>
+</html>
