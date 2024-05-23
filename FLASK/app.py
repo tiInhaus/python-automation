@@ -1,13 +1,18 @@
-﻿from flask import Flask, render_template, request, redirect, Response
-from datetime import datetime 
+﻿import os
+from flask import Flask, json, jsonify, render_template, request, redirect, Response
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+import requests
 from sqlalchemy.sql import func
 from urllib.parse import quote  
 import pandas as pd
 import pyodbc
 import psycopg2 as pg
+
+import sys
 from io import BytesIO
+
+
 
 #PARAMETROS DE CONEXÃO AO BANCO
 server = '10.56.6.56'
@@ -112,6 +117,26 @@ class VISTA_USER_ALERTS(db.Model):
             return f'{self.name}>'
 ############
 
+def getToken():
+    url = f"https://apiprod.gpsvista.com.br/api/auth/login-by-doc"
+    header = {
+        'Content-Type': "application/json",
+    }
+    payload = {
+        "cpf": "sys",
+        "password": "P@ssw0rd$#@"
+    }   
+    res = requests.post(url, data = json.dumps(payload), headers = header)
+    return json.loads(res.content)["authToken"]
+
+def writeLog(logMessage):
+    data_formatada = datetime.datetime.now().strftime("%Y-%m-%dT00:00:00.000Z") 
+
+    logText = f"""{data_formatada} - {logMessage}""" 
+
+    with open(os.getcwd() + '\\log.txt', 'a') as f:
+        f.write('\n' + logText)
+
 ##PÁGINA DE INSERÇÃO DE URL - RASP
 #setando a url - diferenciando GET E POST
 @app.route('/create', methods = ['GET','POST'])
@@ -201,6 +226,42 @@ def add_rasp_delete(id):
         return redirect("/add_rasp")
     except:
         return 'O DELETE FALHOU'
+    
+#PAGINA DE CRIAÇÃO DO CHAMADO
+@app.route('/add_chamado_globo/<string:id>', methods=['GET','POST'])
+def add_chamado_globo(id):
+    try:       
+        if request.method =='GET':      
+            return render_template("add_chamado_globo.html", id = id)
+        if request.method =='POST':
+            data = request.json
+            data_id = data['data_id']  
+            limpeza = data['limpeza']
+            obs = data['obs']
+            # Formatando para o formato desejado
+            data_formatada = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z")
+            token = f"Bearer {getToken()}"
+            header = {
+                'Content-Type': "application/json",
+                'Authorization': token,
+            }     
+            url = "https://apiprod.gpsvista.com.br/api/planejamento/tarefa/adicionar-tarefa-integracao"        
+            payload = {
+                "rotinaId": f"""{data_id}""",            
+                "data": f"""{data_formatada}""",
+                "descricao": f"""Solicitação: {limpeza} \nObservação: {obs}"""
+            }
+            response = requests.post(url, json=payload, headers=header)
+            writeLog(f'rotina: {data_id} - tarefa criada para data {data_formatada}')  
+            return jsonify({'message': 'Tarefa adicionada com sucesso!'})
+        return response.text.replace('"','')
+    except Exception as e:
+        writeLog("Erro: " + e.args[0] + " - Rotina: " + id)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        writeLog(f'Add task error {e}: {exc_type, fname, exc_tb.tb_lineno}')       
+    return render_template("add_chamado_globo.html", id = id)
+
 
 #FUNÇÃO DE UPDATE <int:id> recebe a variável como inteiro e seta valor na variável int
 @app.route('/add_rasp/<int:id>', methods=['GET','POST'])

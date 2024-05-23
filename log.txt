@@ -1,0 +1,17 @@
+
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T00:00:00.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T00:00:00.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:39:51.603328Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:40:45.143492Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:44:00.000Z
+2024-05-20T00:00:00.000Z - Erro: module 'datetime' has no attribute 'strptime' - Rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,,
+2024-05-20T00:00:00.000Z - Add task error module 'datetime' has no attribute 'strptime': (<class 'AttributeError'>, 'app.py', 241)
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:54:40.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:58:25.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:58:39.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:58:47.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a,, - tarefa criada para data 2024-05-20T11:59:55.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a - tarefa criada para data 2024-05-20T12:03:57.000Z
+2024-05-20T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a - tarefa criada para data 2024-05-20T12:27:14.000Z
+2024-05-21T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a - tarefa criada para data 2024-05-21T17:07:35.000Z
