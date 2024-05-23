@@ -1,0 +1,53 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .alert-center {
+    text-align: center;
+    vertical-align: middle;}
+
+
+
+  </style>
+
+<form action="/smart_delta_v2/download_v2">
+  <div class="row g-12 align-items-center">
+    <div class="col-auto">
+      <label for="init_date" class="col-form-label">Data Inicial:</label>
+    </div>
+    <div class="col-auto">
+      <input type="date" id="init_date" class="form-control" name="init_date"  value="{{ini}}">
+    </div>
+    <div class="col-auto">
+      <label for="end_date" class="col-form-label">Data Final:</label>
+    </div>
+    <div class="col-auto">
+      <input type="date" id="end_date" class="form-control" name="end_date">
+    </div>
+    <div class="col-auto">
+    <button type="submit" class="btn btn-secondary" >Download</button>
+  </div>
+  
+  </div>
+
+<div class="container"> 
+    <table class='table'>
+      {% for c in col %}
+      <th>{{c}}</th>
+      {% endfor %}
+
+      {% for row in df %}
+      <tr>   
+      {% for x in row %}
+        <td>
+          <a>{{x}} </a>
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    </table>
+  </div>
+{% endblock %}

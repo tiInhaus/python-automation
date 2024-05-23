@@ -673,6 +673,64 @@ def smart_delta_download():
         # return Response(df.to_csv(index=False), mimetype="text/csv")
     except:
         return redirect("/smart_delta")
+        
+#Página para carregar informações Smart_delta_new
+@app.route('/smart_delta_v2')
+def smart_delta_v2():
+    initial = request.args.get('init_date')
+    final = request.args.get('end_date')
+    return render_template('smartdelta_v2.html', ini=initial, fin=final)
+    # return render_template('smartdelta.html' ,  df = df.values.tolist(), col = df.columns.to_list(), ini=initial, fin=final, file=file)
+
+#Ação do botão para baixar csv de missões aplicando filtro selecionado
+@app.route('/smart_delta_v2/download_v2')
+def smart_delta_download_v2():
+    try:
+        initial = request.args.get('init_date')
+        final = request.args.get('end_date')
+        #query = f""" select m.id  Mission_id, case when f.edited_flight ->> 'category' is not null  then f.edited_flight ->> 'category' else category end as mission_category, case when f.edited_flight ->> 'operation_type' is not null  then f.edited_flight ->> 'operation_type' else operation_type end as mission_type, case when f.edited_flight ->> 'airline_company' is not null  then f.edited_flight ->> 'airline_company' else airline_company end as flight_company, case when f.edited_flight ->> 'number' is not null  then f.edited_flight ->> 'number' else f.number end as flight_number, case when f.edited_flight ->> 'prefix' is not null then f.edited_flight ->> 'prefix' else prefix end as aircraft, case when f.edited_flight ->> 'origin' is not null  then f.edited_flight ->> 'origin' else f.origin end as origin, case when f.edited_flight ->> 'destiny' is not null  then f.edited_flight ->> 'destiny' else f.destiny end as destiny, d.requester as mission_dispatcher, deltas."name" as delta, number_of_pax as delta_pax, to_char(d.start_time, 'DD/MM/YYYY HH24:mi') as mission_start_time, to_char(d.finish_time,'DD/MM/YYYY HH24:mi') as mission_finish_time, case when f.edited_flight ->> 'responsable' is not null  then f.edited_flight ->> 'responsable' else f.responsable end as responsable, to_char(finish_time, 'DD') as dia, to_char(finish_time, 'MM') as mes, to_char(finish_time, 'YYYY') as ano, to_char(finish_time - start_time, 'HH24:MI:SS') as tempo_missao, to_char(mission_end - mission_start, 'HH24:MI:SS') as tempo_total_missao, cast(f.chock_schedule_datetime as timestamp) as horario_calco,cast(d.request_date as timestamp) as solicitado,cast(d.gate_arrival_time as timestamp) as chegada_portao,cast(d.cia_start_time as timestamp) as inicio_cia,cast(d.passengers_start_time as timestamp) as saida_portao,cast(d.passengers_end_time as timestamp) as delta_livre from missions m inner join flights f on f.id = m.flight_id inner join dispatches d on d.mission_id = m.id inner join deltas on deltas.id = d.delta_id where finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval) order by finish_time asc """ 
+        query = f""" select m.id  Mission_id, 
+case when f.edited_flight ->> 'category' is not null  then f.edited_flight ->> 'category' else category end as mission_category, 
+case when f.edited_flight ->> 'operation_type' is not null  then f.edited_flight ->> 'operation_type' else operation_type end as mission_type, 
+case when f.edited_flight ->> 'airline_company' is not null  then f.edited_flight ->> 'airline_company' else airline_company end as flight_company, 
+case when f.edited_flight ->> 'number' is not null  then f.edited_flight ->> 'number' else f.number end as flight_number, 
+case when f.edited_flight ->> 'prefix' is not null then f.edited_flight ->> 'prefix' else prefix end as aircraft, 
+case when f.edited_flight ->> 'origin' is not null  then f.edited_flight ->> 'origin' else f.origin end as origin, 
+case when f.edited_flight ->> 'destiny' is not null  then f.edited_flight ->> 'destiny' else f.destiny end as destiny, 
+d.requester as mission_dispatcher, 
+deltas."name" as delta, 
+number_of_pax as delta_pax, 
+to_char(d.start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') as mission_start_time, 
+to_char(d.finish_time - interval '3 hours','DD/MM/YYYY HH24:mi') as mission_finish_time, 
+case when f.edited_flight ->> 'responsable' is not null  then f.edited_flight ->> 'responsable' else f.responsable end as responsable, 
+to_char(finish_time, 'DD') as dia, 
+to_char(finish_time, 'MM') as mes, 
+to_char(finish_time, 'YYYY') as ano, 
+to_char(finish_time - start_time, 'HH24:MI:SS') as tempo_missao, 
+to_char(mission_end - mission_start, 'HH24:MI:SS') as tempo_total_missao, 
+to_char(f.chock_schedule_datetime - interval '3 hours', 'DD/MM/YYYY HH24:mi') as horario_calco, 
+to_char(d.request_date - interval '3 hours', 'DD/MM/YYYY HH24:mi') as solicitado, 
+to_char(m.requested_dispatch - interval '3 hours', 'DD/MM/YYYY HH24:mi') as solicitado_despachante, 
+to_char(d.gate_arrival_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') as chegada_portao,
+to_char(d.cia_start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') as inicio_cia,
+to_char(d.passengers_start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') as saida_portao,
+to_char(d.passengers_end_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') as delta_livre,
+to_char(estimated_datetime - interval '3 hours', 'DD/MM/YYYY HH24:mi') as ETD_ETA
+from missions m 
+inner join flights f on f.id = m.flight_id 
+inner join dispatches d on d.mission_id = m.id 
+inner join deltas on deltas.id = d.delta_id
+where finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval) order by finish_time asc """
+        engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-dev-rds.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
+        df = pd.read_sql(query, con=engine)
+               
+        bio = BytesIO()
+        df.to_excel(bio,index=False)
+        bio.seek(0) 
+        return Response(bio, mimetype="application/vnd.ms-excel")
+        # return Response(df.to_csv(index=False), mimetype="text/csv")
+    except:
+        return redirect("/smart_delta_v2")
 
 
 @app.route('/')
