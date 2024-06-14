@@ -1,15 +1,12 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GPS Vista - Globo</title>
     <style>
-
         body {
-            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -18,32 +15,82 @@
             background-color: #f4f4f4;
         }
 
-        
-        .header{
-            display: flex;
-            margin-left: auto;
-        }
 
-        .header2{
+        .header {
             display: flex;
             justify-content: space-between;
         }
 
-        .imgs{
+        .header2 {
             display: flex;
             justify-content: space-between;
-        }
-    
-        .container {
-            width: 30%;
-            height: 50%;
-            padding: 1%;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
             flex-direction: column;
+        }
+
+        .imgs {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Portrait iPhone 6 to 8 */
+        @media only screen and (max-width: 667px) {
+            .container {
+                height: 100%;
+                padding: 30px;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+            }
+
+            input, select {
+                height: 60px !important;
+                width: 250px !important;
+            }
+
+            button {
+                height: 50px !important;
+                width: 150px !important;
+                font-size: 1em !important;
+                font-weight: bold !important;
+            }
+        }
+
+        @media only screen and (min-width: 667px) {
+            .container {
+                width: 40%;
+                height: 100%;
+                padding: 30px;
+                background-color: #fff;
+                border: 10px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+                margin: 0 auto;
+            }
+
+            h2 {
+                margin: 0;
+                font-size: 1.0em;
+                text-align: left;
+                margin: 10px 20px;
+            }
+
+            body {
+                font-size: 30px;
+            }
+
+            input,
+            select {
+                width: 80% !important;
+            }
+
+            #button {
+                font-size: 40px;
+            }
         }
 
         h1 {
@@ -54,39 +101,46 @@
 
 
         h2 {
-            margin: 0;
+            margin: 10px 0px;
             font-size: 1.0em;
             text-align: left;
+
         }
 
         h3 {
             margin: 0;
             font-size: 0.5em;
             text-align: left;
-            padding-bottom: 10%;
-            padding-top: 2%;
+            padding-bottom: 10px;
+            padding-top: 10px;
         }
+
         select {
             font-size: 0.7em;
         }
-        select, textarea, button {
-            width: 100%;
-            border: 1px solid #ccc;
+
+        select,
+        input,
+        button {
+            height: 100px;
+            width: 400px;
+            border: 1px solid rgb(126, 126, 126);
             border-radius: 4px;
             font-size: 1em;
-            margin-bottom: 5%;
-            font-family:"Arial"; 
+            margin-bottom: 20px;
+            font-family: "Arial";
+            align-self: center;
         }
 
-        textarea {
-            height: 100px; /* Pode ajustar conforme necessário */
-            width: auto;
-            font-family:"Arial"; 
+        input {
+            height: 100px;
+            width: 300px;
+            font-family: "Arial";
         }
 
         button {
-            background-color: #000000;
-            color: #fff;
+            background-color: #050047;
+            color: #dfdfdf;
             border: none;
             cursor: pointer;
             font-size: 2em;
@@ -94,65 +148,145 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #05023b;
         }
 
-        select 
-        { 
-            color: gray; 
+        select {
+            color: rgb(0, 0, 0);
         }
 
-        img
-        {
-            width: 100px;
-            height: 35px;
+        img {
+            width: 150px;
+            margin-bottom: 20px;
         }
 
+        #campos {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
-<script> 
-    function add_tarefa(id){
-        var selectValue = document.querySelector("select").value; // Pegar o valor do select
-        var textareaValue = document.querySelector("textarea").value; // Pegar o valor do textarea
+<script>
+    //dps do clique, caso sucesso, mensagem de solicitacao realizada com titulo e icone, e form some.
+    //responsividade
+    //
+    let x = 0
+    function add_tarefa(id) {
+        var selectValue = document.querySelector("select").value;
+        var inputValue = document.querySelector("input").value;
+        if (selectValue == '') {
+            alert('Há alguma informação faltando!')
+        }
+        else {
 
-        const data = {
-            data_id: id,
-            limpeza: selectValue,
-            obs: textareaValue
-        };
+            if (confirm("Tem certeza que deseja abrir o chamado?")) {
+                txt = "Chamado aberto!";
+                if (x == 0) {
+                    x = 1
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
+                    const data = {
+                        data_id: id,
+                        limpeza: selectValue,
+                        obs: inputValue
+                    };
 
-        fetch('/add_chamado_globo/' + id, options)
-            .then(response => response.json())
-            .then(response => console.log(response))
-            .catch(err => console.error(err));
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    };
+
+                    fetch('/chamado/novo_chamado/' + id, options)
+                        .then(response => response.json())
+                        .then(response => console.log(response))
+                        .catch(err => console.error(err));
+
+                }
+
+                if (x == 1) {
+                    var input1 = document.getElementById("input1");
+                    input1.value = '';
+
+
+                    var input2 = document.getElementById("input2");
+                    input2.value = '';
+
+                    var header2 = document.getElementById("header2");
+                    header2.style.display = "none";
+
+                    var campos = document.getElementById("campos");
+                    campos.style.display = "none";
+                    campos.style.background = "rgb(185, 181, 181))";
+
+                    var campos = document.getElementById("thanks");
+                    campos.style.display = "flex";
+                }
+            }
+
+            else {
+                txt = "Cancelado";
+            }
+
+        }
+
     }
 </script>
+
 <body>
+
     <div class="container">
+
         <div class="header">
-            <img src="data:image/png;base64,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" alt="grupogps">
+
+            <img src="data:image/png;base64,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"
+                alt="grupogps">
+            <img style="height: 40px; margin-top: 20px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnnD-UDMcBabIJH7JYY_uvKzpQF1TxlUe2BwmRPUa3-tE7Z89gY9t5C_l7oN_ERqKnfg&usqp=CAU"
+                alt="grupogps">
         </div>
-        <div class="header2">
+
+        <div id="header2" class="header2">
+
             <h1>SOLICITAÇÃO SERVIÇO</h1>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnnD-UDMcBabIJH7JYY_uvKzpQF1TxlUe2BwmRPUa3-tE7Z89gY9t5C_l7oN_ERqKnfg&usqp=CAU" alt="grupogps">  
+
+            <h3 style="margin-bottom: 40px">ABERTURA DE CHAMADO REFEITÓRIO</h3>
         </div>
-            <h3>ABERTURA DE CHAMADO REFEITÓRIO</h3>
-        <h2>Solicitação*</h2>
-        <select required>
-            <option value="" disabled selected>Selecione aqui...</option>
-            <option value="Limpeza">Limpeza</option>
-        </select>
-        <h2>Observação</h2>
-        <textarea name="obs" placeholder="Digite aqui..."></textarea>
-        <button onclick="add_tarefa('{{id}}')"> CONCLUIR</button>
+
+        <div style="margin-bottom: 20px" id="campos">
+
+            <h2 style="margin-bottom: 15px">Solicitação*</h2>
+
+            <select style="margin-bottom:40px" id="input1" required>
+
+                <option value="" selected>Selecione aqui...</option>
+
+                <option value="Limpeza">Limpeza</option>
+
+            </select>
+
+            <h2 style="margin-bottom: 15px">Observação</h2>
+
+            <input id="input2" placeholder="Digite aqui..."></input>
+
+            <button id="button" onclick="add_tarefa('{{id}}')">ENVIAR</button>
+
+        </div>
+
+        <div id="thanks" style="display:none; text-align:center; flex-direction:column; flex-wrap:wrap;">
+
+            <h1 style="margin-bottom: 20px" ; style="margin-top: 100px">
+                Chamado aberto com sucesso!
+            </h1>
+
+            <h2 style="margin-bottom: 20px">
+                Obrigado pela visita!
+            </h2>
+
+        </div>
+
     </div>
+
 </body>
+
 </html>

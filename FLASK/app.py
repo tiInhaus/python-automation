@@ -228,7 +228,7 @@ def add_rasp_delete(id):
         return 'O DELETE FALHOU'
     
 #PAGINA DE CRIAÇÃO DO CHAMADO
-@app.route('/add_chamado_globo/<string:id>', methods=['GET','POST'])
+@app.route('/chamado/novo_chamado/<string:id>', methods=['GET','POST'])
 def add_chamado_globo(id):
     try:       
         if request.method =='GET':      
