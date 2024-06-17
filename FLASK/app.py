@@ -27,8 +27,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "msuuuuuuuperkey141Kk42"
 db = SQLAlchemy(app)
 
-
-
 #### Criação das Classes/Tabelas banco
 class RASP_NAMES(db.Model):
     __tablename__ = "RASP_NAMES"
@@ -228,18 +226,22 @@ def add_rasp_delete(id):
         return 'O DELETE FALHOU'
     
 #PAGINA DE CRIAÇÃO DO CHAMADO
-@app.route('/add_chamado_globo/<string:id>', methods=['GET','POST'])
-def add_chamado_globo(id):
+@app.route('/chamado/novo_chamado/<string:nome>/<string:id>', methods=['GET','POST'])
+def add_chamado_globo(id, nome=""):
     try:       
         if request.method =='GET':      
-            return render_template("add_chamado_globo.html", id = id)
+
+            return render_template("add_chamado_globo.html",nome = nome, id = id)
         if request.method =='POST':
             data = request.json
             data_id = data['data_id']  
             limpeza = data['limpeza']
             obs = data['obs']
             # Formatando para o formato desejado
-            data_formatada = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z")
+            diferenca = datetime.timedelta(hours=-3)
+            fuso_horario = datetime.timezone(diferenca)
+            data_formatada = datetime.datetime.now().astimezone(fuso_horario).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+            print(data_formatada)
             token = f"Bearer {getToken()}"
             header = {
                 'Content-Type': "application/json",
@@ -260,7 +262,7 @@ def add_chamado_globo(id):
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         writeLog(f'Add task error {e}: {exc_type, fname, exc_tb.tb_lineno}')       
-    return render_template("add_chamado_globo.html", id = id)
+    return render_template("add_chamado_globo.html",nome = nome, id = id)
 
 
 #FUNÇÃO DE UPDATE <int:id> recebe a variável como inteiro e seta valor na variável int
