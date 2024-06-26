@@ -1,6 +1,7 @@
 ﻿import os
-from flask import Flask, json, jsonify, logging, render_template, request, redirect, Response
+from flask import Flask, json, jsonify, render_template, request, redirect, Response
 from flask_sqlalchemy import SQLAlchemy
+import logging
 import datetime
 import requests
 from sqlalchemy.sql import func
