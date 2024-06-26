@@ -1,0 +1,4 @@
+
+2024-06-17T00:00:00.000Z - Erro: unsupported operand type(s) for -: 'str' and 'datetime.timedelta' - Rotina: asdasdsad
+2024-06-17T00:00:00.000Z - Add task error unsupported operand type(s) for -: 'str' and 'datetime.timedelta': (<class 'TypeError'>, 'app.py', 235)
+2024-06-17T00:00:00.000Z - rotina: 8bf4af68-aea2-4b1f-9203-98b171f93f7a - tarefa criada para data 2024-06-17T17:45:01.000Z
