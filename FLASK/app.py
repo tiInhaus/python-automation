@@ -1,5 +1,5 @@
 ﻿import os
-from flask import Flask, json, jsonify, render_template, request, redirect, Response
+from flask import Flask, json, jsonify, logging, render_template, request, redirect, Response
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 import requests
@@ -467,8 +467,9 @@ def projeto_king_vista_find(id):
         return render_template('exemplo_teste_find.html',  df = df.values.tolist())
 
 
-
+logging.basicConfig(filename='log.txt', level=logging.ERROR, format='%(asctime)s %(message)s')
 @app.route('/gpsvista_tarefas/', methods=['GET'])
+# Configuração do logger
 def gpsvista_tarefas(data=None):
     if request.method == 'GET':
         query_user = ("""
@@ -519,7 +520,7 @@ def gpsvista_tarefas(data=None):
                 conn.close()
                 return df, df_meses
             except pyodbc.Error as e:
-                print(f"Erro na conexão com o banco de dados: {e}")
+                logging.error(f"Erro na conexão com o banco de dados: {e}")
                 return None, None
 
         while True:
@@ -556,32 +557,7 @@ def gpsvista_tarefas(data=None):
                                mes_10='out', mes_11='nov', mes_12='dez')
 
 
-#Página para carregar informações Smart_delta
-@app.route('/smart_delta')
-def smart_delta():
-    initial = request.args.get('init_date')
-    final = request.args.get('end_date')
-    return render_template('smartdelta.html', ini=initial, fin=final)
-    # return render_template('smartdelta.html' ,  df = df.values.tolist(), col = df.columns.to_list(), ini=initial, fin=final, file=file)
-
-#Ação do botão para baixar csv de missões aplicando filtro selecionado
-@app.route('/smart_delta/download')
-def smart_delta_download():
-    try:
-        initial = request.args.get('init_date')
-        final = request.args.get('end_date')
-        query = f""" select m.id  Mission_id, case when f.edited_flight ->> 'category' is not null  then f.edited_flight ->> 'category' else category end as mission_category, case when f.edited_flight ->> 'operation_type' is not null  then f.edited_flight ->> 'operation_type' else operation_type end as mission_type, case when f.edited_flight ->> 'airline_company' is not null  then f.edited_flight ->> 'airline_company' else airline_company end as flight_company, case when f.edited_flight ->> 'number' is not null  then f.edited_flight ->> 'number' else f.number end as flight_number, case when f.edited_flight ->> 'prefix' is not null then f.edited_flight ->> 'prefix' else prefix end as aircraft, case when f.edited_flight ->> 'origin' is not null  then f.edited_flight ->> 'origin' else f.origin end as origin, case when f.edited_flight ->> 'destiny' is not null  then f.edited_flight ->> 'destiny' else f.destiny end as destiny, d.requester as mission_dispatcher, deltas."name" as delta, number_of_pax as delta_pax, to_char(d.start_time, 'DD/MM/YYYY HH24:mi') as mission_start_time, to_char(d.finish_time,'DD/MM/YYYY HH24:mi') as mission_finish_time, case when f.edited_flight ->> 'responsable' is not null  then f.edited_flight ->> 'responsable' else f.responsable end as responsable, to_char(finish_time, 'DD') as dia, to_char(finish_time, 'MM') as mes, to_char(finish_time, 'YYYY') as ano, to_char(finish_time - start_time, 'HH24:MI:SS') as tempo_missao, to_char(mission_end - mission_start, 'HH24:MI:SS') as tempo_total_missao from missions m inner join flights f on f.id = m.flight_id inner join dispatches d on d.mission_id = m.id inner join deltas on deltas.id = d.delta_id where finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval) order by finish_time asc """ 
-        engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-dev-rds.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
-        df = pd.read_sql(query, con=engine)
-               
-        bio = BytesIO()
-        df.to_excel(bio,index=False)
-        bio.seek(0) 
-        return Response(bio, mimetype="application/vnd.ms-excel")
-        # return Response(df.to_csv(index=False), mimetype="text/csv")
-    except:
-        return redirect("/smart_delta")
-        
+       
 #Página para carregar informações Smart_delta_new
 @app.route('/smart_delta_v2')
 def smart_delta_v2():
@@ -629,7 +605,7 @@ inner join flights f on f.id = m.flight_id
 inner join dispatches d on d.mission_id = m.id 
 inner join deltas on deltas.id = d.delta_id
 where finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval) order by finish_time asc """
-        engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-dev-rds.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
+        engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-rds-dev-upt.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
         df = pd.read_sql(query, con=engine)
                
         bio = BytesIO()
@@ -637,8 +613,9 @@ where finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_da
         bio.seek(0) 
         return Response(bio, mimetype="application/vnd.ms-excel")
         # return Response(df.to_csv(index=False), mimetype="text/csv")
-    except:
-        return redirect("/smart_delta_v2")
+    except Exception as e:
+        return render_template('smartdelta_v2.html', e = "Erro ao fazer o download")
+        #return redirect("/smart_delta_v2")
 
 
 @app.route('/')
