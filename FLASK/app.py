@@ -611,7 +611,7 @@ from dispatches d
 		and f.category in ('Pax','Special','Trip')
 		and is_canceled is false
 		and request_date::date >= date_trunc('month', current_date - interval '10 months')::date
-		and finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval)
+		and start_time >= to_date('{initial}', 'YYYY-MM-dd') AND start_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval)
 	order by d.finish_time desc """
         engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-rds-dev-upt.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
         df = pd.read_sql(query, con=engine)
