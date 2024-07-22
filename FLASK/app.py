@@ -584,8 +584,9 @@ def smart_delta_download_v2():
 	f.origin AS "ORIGEM",
 	f.destiny AS "DESTINO",
 	deltas.name AS "DELTA",
-	d.number_of_pax AS "QTDE PASSAGEIROS",
-	f.responsable AS "RESPONSAVEL",
+	d.number_of_pax AS "PAX",
+	CASE WHEN f.edited_flight ->> 'responsable' IS NOT NULL  
+		THEN f.edited_flight ->> 'responsable' ELSE f.responsable END AS "RESPONSAVEL",
 	to_char(d.start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "START_TIME",
 	to_char(f.chock_schedule_datetime - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "CALÇO",
 	to_char(m.requested_dispatch - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "SOLICITADO_DESPACHANTE",
@@ -594,28 +595,23 @@ def smart_delta_download_v2():
 	to_char(d.cia_start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "INICIO_CIA",
 	to_char(d.passengers_start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "SAIDA_PORTAO",
 	to_char(d.passengers_end_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "DELTA_LIVRE",
-	
 	to_char(CASE WHEN d.finish_time < d.start_time
 		 THEN d.updated_at ELSE d.finish_time
 	END - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "FINISH_TIME",
-	
-	to_char((CASE WHEN d.finish_time < d.start_time
-		 THEN d.updated_at ELSE d.finish_time END) - d.start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi')
-	AS "TEMPO_MISSAO",
-	m.mission_end - m.mission_start AS "TEMPO_TOTAL_MISSAO"
+	to_char((d.passengers_end_time - d.request_date), 'HH24:mi') AS "DELTA_EM_ATIVIDADE",
+	d.delay_reason AS "MOTIVO_DE_ATRASO"	
 	
 -- JOINS E WHERE'S:
 from dispatches d
 	left join deltas on d.delta_id = deltas.id
 	left join missions m on d.mission_id = m.id
 	left join flights f on m.flight_id = f.id
-	where d.updated_at > CURRENT_DATE - INTERVAL '36 months'
-		and m.mission_status != 'cancelled' 
+	where m.mission_status != 'cancelled' 
 		and m.requested_dispatch is not null 
 		and f.category in ('Pax','Special','Trip')
 		and is_canceled is false
 		and request_date::date >= date_trunc('month', current_date - interval '10 months')::date
-		and d.finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND d.finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval) 
+		and finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval)
 	order by d.finish_time desc """
         engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-rds-dev-upt.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
         df = pd.read_sql(query, con=engine)
