@@ -439,10 +439,10 @@ def projeto_king_vista(data=None):
     if request.method =='GET':
         # SE NÃO INFORMAR DATA 
         if data == None:
-            query_user = ("""  select  t.numero  ,t.Nome as rotina , e.HierarquiaDescricao  as "HierarquiaDescricao",format(inicio,'dd/MM/yyyy HH:mm') as inicio,format(InicioReal,'dd/MM/yyyy HH:mm') as inicio_real,   r.Nome,  CASE WHEN t.Status = 85 and (ep.Conteudo ='SUPERVISÃO' or ep.Conteudo ='SUPERVISAO') then 80 WHEN t.Status = 85 and ep.Conteudo = 'EQUIPE DO CONTRATO' then 85  WHEN t.Status = 10 AND DATEADD(HH, -3, GETDATE()) < t.Termino THEN 10 else 15 END AS Status, t.Id  from Vista_Replication_PRD.dbo.Tarefa t inner join Vista_Replication_PRD.dbo.Estrutura e on e.Id = t.EstruturaId  left join Vista_Replication_PRD.dbo.Execucao e2 on e2.TarefaId = t.Id and e2.Status = 85 left join Vista_Replication_PRD.dbo.Recurso r on r.CodigoHash  = e2.CriadoPorHash  left join Vista_Replication_PRD.dbo.Execucao ep on ep.TarefaId = t.Id and ep.PerguntaId = 'B5CC42F8-885C-409C-8AC3-08DAB5B08DDF' where FORMAT(Disponibilizacao, 'dd/MM/yyyy') = FORMAT(DATEADD(HH, -3, GETDATE()), 'dd/MM/yyyy') and (t.Nome = 'TAREFA INICIAL BK' OR t.Nome ='TAREFA INICIAL REPOSIÇÃO BK' OR t.Nome ='RELATO SUPERVISÃO BK' OR t.Nome ='NOVA TAREFA INICIAL' OR t.Nome ='VERIFICAÇÃO IRIS BK')    order by numero desc      """)  
+            query_user = ("""  select  t.numero  ,t.Nome as rotina , e.HierarquiaDescricao  as "HierarquiaDescricao",format(inicio,'dd/MM/yyyy HH:mm') as inicio,format(InicioReal,'dd/MM/yyyy HH:mm') as inicio_real,   r.Nome,  CASE WHEN t.Status = 85 and (ep.Conteudo ='SUPERVISÃO' or ep.Conteudo ='SUPERVISAO') then 80 WHEN t.Status = 85 and ep.Conteudo = 'EQUIPE DO CONTRATO' then 85  WHEN t.Status = 10 AND DATEADD(HH, -3, GETDATE()) < t.Termino THEN 10 else 15 END AS Status, t.Id  from Vista_Replication_PRD.dbo.Tarefa t with (nolock) inner join Vista_Replication_PRD.dbo.Estrutura e with (nolock) on e.Id = t.EstruturaId  left join Vista_Replication_PRD.dbo.Execucao e2 with (nolock) on e2.TarefaId = t.Id and e2.Status = 85 left join Vista_Replication_PRD.dbo.Recurso r with (nolock) on r.CodigoHash  = e2.CriadoPorHash  left join Vista_Replication_PRD.dbo.Execucao ep with (nolock) on ep.TarefaId = t.Id and ep.PerguntaId = 'B5CC42F8-885C-409C-8AC3-08DAB5B08DDF' where FORMAT(Disponibilizacao, 'dd/MM/yyyy') = FORMAT(DATEADD(HH, -3, GETDATE()), 'dd/MM/yyyy') and (t.Nome = 'TAREFA INICIAL BK' OR t.Nome ='TAREFA INICIAL REPOSIÇÃO BK' OR t.Nome ='RELATO SUPERVISÃO BK' OR t.Nome ='NOVA TAREFA INICIAL' OR t.Nome ='VERIFICAÇÃO IRIS BK')    order by numero desc      """)  
        #  SE INFORMAR DATA
         else:
-            query_user = ("""  select  t.numero  ,t.Nome as rotina , e.HierarquiaDescricao  as "HierarquiaDescricao",format(inicio,'dd/MM/yyyy HH:mm') as inicio,format(InicioReal,'dd/MM/yyyy HH:mm') as inicio_real,   r.Nome,  CASE WHEN t.Status = 85 and (ep.Conteudo ='SUPERVISÃO' or ep.Conteudo ='SUPERVISAO') then 80 WHEN t.Status = 85 and ep.Conteudo = 'EQUIPE DO CONTRATO' then 85  WHEN t.Status = 10 AND DATEADD(HH, -3, GETDATE()) < t.Termino THEN 10 else 15 END AS Status, t.Id  from Vista_Replication_PRD.dbo.Tarefa t inner join Vista_Replication_PRD.dbo.Estrutura e on e.Id = t.EstruturaId  left join Vista_Replication_PRD.dbo.Execucao e2 on e2.TarefaId = t.Id and e2.Status = 85 left join Vista_Replication_PRD.dbo.Recurso r on r.CodigoHash  = e2.CriadoPorHash  left join Vista_Replication_PRD.dbo.Execucao ep on ep.TarefaId = t.Id and ep.PerguntaId = 'B5CC42F8-885C-409C-8AC3-08DAB5B08DDF' where FORMAT(Disponibilizacao, 'dd-MM-yyyy') = '{data}' and (t.Nome = 'TAREFA INICIAL BK' OR t.Nome ='TAREFA INICIAL REPOSIÇÃO BK' OR t.Nome ='RELATO SUPERVISÃO BK' OR t.Nome ='NOVA TAREFA INICIAL' OR t.Nome ='VERIFICAÇÃO IRIS BK')    order by numero desc      """)  
+            query_user = ("""  select  t.numero  ,t.Nome as rotina , e.HierarquiaDescricao  as "HierarquiaDescricao",format(inicio,'dd/MM/yyyy HH:mm') as inicio,format(InicioReal,'dd/MM/yyyy HH:mm') as inicio_real,   r.Nome,  CASE WHEN t.Status = 85 and (ep.Conteudo ='SUPERVISÃO' or ep.Conteudo ='SUPERVISAO') then 80 WHEN t.Status = 85 and ep.Conteudo = 'EQUIPE DO CONTRATO' then 85  WHEN t.Status = 10 AND DATEADD(HH, -3, GETDATE()) < t.Termino THEN 10 else 15 END AS Status, t.Id  from Vista_Replication_PRD.dbo.Tarefa t with (nolock) inner join Vista_Replication_PRD.dbo.Estrutura e with (nolock) on e.Id = t.EstruturaId  left join Vista_Replication_PRD.dbo.Execucao e2 with (nolock) on e2.TarefaId = t.Id and e2.Status = 85 left join Vista_Replication_PRD.dbo.Recurso r with (nolock) on r.CodigoHash  = e2.CriadoPorHash  left join Vista_Replication_PRD.dbo.Execucao ep with (nolock) on ep.TarefaId = t.Id and ep.PerguntaId = 'B5CC42F8-885C-409C-8AC3-08DAB5B08DDF' where FORMAT(Disponibilizacao, 'dd-MM-yyyy') = '{data}' and (t.Nome = 'TAREFA INICIAL BK' OR t.Nome ='TAREFA INICIAL REPOSIÇÃO BK' OR t.Nome ='RELATO SUPERVISÃO BK' OR t.Nome ='NOVA TAREFA INICIAL' OR t.Nome ='VERIFICAÇÃO IRIS BK')    order by numero desc      """)  
         #PASSA PARAMETROS DE CONEXÃO
         conn = pyodbc.connect ('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
         df = pd.read_sql(query_user, conn)
@@ -458,7 +458,7 @@ def projeto_king_vista(data=None):
 def projeto_king_vista_find(id):
     if request.method =='GET':
         # EXECUTA CONSULTA
-        query_user = ("""select p.Descricao as Pergunta, e.Conteudo as Resposta from Vista_Replication_PRD.dbo.Execucao e  inner join Pergunta p on p.Id = e.PerguntaId where TarefaId = '{}' order by Criado """).format(id)  
+        query_user = ("""select p.Descricao as Pergunta, e.Conteudo as Resposta from Vista_Replication_PRD.dbo.Execucao e with (nolock) inner join Pergunta p on p.Id = e.PerguntaId where TarefaId = '{}' order by Criado """).format(id)  
         conn = pyodbc.connect ('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
         df = pd.read_sql(query_user, conn)
         conn.close()
@@ -475,7 +475,7 @@ def gpsvista_tarefas(data=None):
     if request.method == 'GET':
         query_user = ("""
             SELECT COUNT(1) AS Id 
-            FROM Vista_Replication_PRD.dbo.Tarefa  
+            FROM Vista_Replication_PRD.dbo.Tarefa with (nolock) 
             WHERE status = 85 AND expirada = 0 
               AND TerminoReal >= DATEFROMPARTS(YEAR(DATEADD(HH, -3, GETDATE())), MONTH(DATEADD(HH, -3, GETDATE())), 1)
               AND TerminoReal < DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(DATEADD(HH, -3, GETDATE())), MONTH(DATEADD(HH, -3, GETDATE())), 1))
@@ -499,7 +499,7 @@ def gpsvista_tarefas(data=None):
                 SELECT 
                     MONTH(TerminoReal) AS Mes,
                     COUNT(1) AS TotalTarefas
-                FROM Tarefa  
+                FROM Tarefa  with (nolock)
                 WHERE status = 85 AND expirada = 0
                   AND TerminoReal >= DATEFROMPARTS(YEAR(DATEADD(HH, -3, GETDATE())), 1, 1)
                   AND TerminoReal < DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(DATEADD(HH, -3, GETDATE())), 1, 1))
@@ -574,46 +574,10 @@ def smart_delta_download_v2():
         initial = request.args.get('init_date')
         final = request.args.get('end_date')
         #query = f""" select m.id  Mission_id, case when f.edited_flight ->> 'category' is not null  then f.edited_flight ->> 'category' else category end as mission_category, case when f.edited_flight ->> 'operation_type' is not null  then f.edited_flight ->> 'operation_type' else operation_type end as mission_type, case when f.edited_flight ->> 'airline_company' is not null  then f.edited_flight ->> 'airline_company' else airline_company end as flight_company, case when f.edited_flight ->> 'number' is not null  then f.edited_flight ->> 'number' else f.number end as flight_number, case when f.edited_flight ->> 'prefix' is not null then f.edited_flight ->> 'prefix' else prefix end as aircraft, case when f.edited_flight ->> 'origin' is not null  then f.edited_flight ->> 'origin' else f.origin end as origin, case when f.edited_flight ->> 'destiny' is not null  then f.edited_flight ->> 'destiny' else f.destiny end as destiny, d.requester as mission_dispatcher, deltas."name" as delta, number_of_pax as delta_pax, to_char(d.start_time, 'DD/MM/YYYY HH24:mi') as mission_start_time, to_char(d.finish_time,'DD/MM/YYYY HH24:mi') as mission_finish_time, case when f.edited_flight ->> 'responsable' is not null  then f.edited_flight ->> 'responsable' else f.responsable end as responsable, to_char(finish_time, 'DD') as dia, to_char(finish_time, 'MM') as mes, to_char(finish_time, 'YYYY') as ano, to_char(finish_time - start_time, 'HH24:MI:SS') as tempo_missao, to_char(mission_end - mission_start, 'HH24:MI:SS') as tempo_total_missao, cast(f.chock_schedule_datetime as timestamp) as horario_calco,cast(d.request_date as timestamp) as solicitado,cast(d.gate_arrival_time as timestamp) as chegada_portao,cast(d.cia_start_time as timestamp) as inicio_cia,cast(d.passengers_start_time as timestamp) as saida_portao,cast(d.passengers_end_time as timestamp) as delta_livre from missions m inner join flights f on f.id = m.flight_id inner join dispatches d on d.mission_id = m.id inner join deltas on deltas.id = d.delta_id where finish_time >= to_date('{initial}', 'YYYY-MM-dd') AND finish_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval) order by finish_time asc """ 
-        query = f""" SELECT
-	m.id AS "ID",
-	f.category AS "TIPO",
-	f.operation_type  AS "CATEGORIA",
-	f.airline_company AS "CIA",
-	f.number AS "NUMERO",
-	f.prefix AS "PREFIXO",
-	f.origin AS "ORIGEM",
-	f.destiny AS "DESTINO",
-	deltas.name AS "DELTA",
-	d.number_of_pax AS "PAX",
-	CASE WHEN f.edited_flight ->> 'responsable' IS NOT NULL  
-		THEN f.edited_flight ->> 'responsable' ELSE f.responsable END AS "RESPONSAVEL",
-	to_char(d.start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "START_TIME",
-	to_char(f.chock_schedule_datetime - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "CALÇO",
-	to_char(m.requested_dispatch - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "SOLICITADO_DESPACHANTE",
-	to_char(d.request_date - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "SOLICITADO",
-	to_char(d.gate_arrival_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "CHEGADA_PORTAO",
-	to_char(d.cia_start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "INICIO_CIA",
-	to_char(d.passengers_start_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "SAIDA_PORTAO",
-	to_char(d.passengers_end_time - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "DELTA_LIVRE",
-	to_char(CASE WHEN d.finish_time < d.start_time
-		 THEN d.updated_at ELSE d.finish_time
-	END - interval '3 hours', 'DD/MM/YYYY HH24:mi') AS "FINISH_TIME",
-	to_char((d.passengers_end_time - d.request_date), 'HH24:mi') AS "DELTA_EM_ATIVIDADE",
-	d.delay_reason AS "MOTIVO_DE_ATRASO"	
-	
--- JOINS E WHERE'S:
-from dispatches d
-	left join deltas on d.delta_id = deltas.id
-	left join missions m on d.mission_id = m.id
-	left join flights f on m.flight_id = f.id
-	where m.mission_status != 'cancelled' 
-		and m.requested_dispatch is not null 
-		and f.category in ('Pax','Special','Trip')
-		and is_canceled is false
-		and request_date::date >= date_trunc('month', current_date - interval '10 months')::date
-		and start_time >= to_date('{initial}', 'YYYY-MM-dd') AND start_time < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval)
-	order by d.finish_time desc """
-        engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-rds-dev-upt.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
+        query = f""" select * from vw_vista
+where to_date("START_TIME", 'dd-MM-YYYY h:m')  >= to_date('{initial}', 'YYYY-MM-dd') AND to_date("START_TIME", 'dd-MM-YYYY h:m') < (to_date('{final}', 'YYYY-MM-dd') + '1 day'::interval) """
+        #engine = pg.connect("dbname='postgres' user='le_mongo' host='optpax-rds-dev-upt.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='cGg1oqFgjJK77H1231v'")
+        engine = pg.connect("dbname='postgres' user='igor_souza' host='optpax-rds-dev-upt.c6cxy1r8mq9z.us-east-1.rds.amazonaws.com' port='5432' password='*c!C$&hqTJ99g&OT'")
         df = pd.read_sql(query, con=engine)
                
         bio = BytesIO()
